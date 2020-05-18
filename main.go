@@ -103,18 +103,18 @@ func loadHolidaysAPIData(cfg configuration) []holiday {
 func adjustWeekend(t time.Time, d time.Time, cfg configuration) string {
 	var w string
 	if t.Weekday() == time.Friday || t.Weekday() == time.Saturday {
-		w = fmt.Sprintf(", and the weekend will last 3 days: %s - %s", t.Format(cfg.OutputLayout), t.Add(time.Hour*48).Format(cfg.OutputLayout))
+		w = fmt.Sprintf(", and the weekend will last 3 days: %s - %s", t.Format(cfg.OutputLayout), t.AddDate(0, 0, 2).Format(cfg.OutputLayout))
 	} else if t.Weekday() == time.Sunday {
 		if t.Equal(d) {
-			w = fmt.Sprintf(", and the weekend will last to %s", t.Add(time.Hour*24).Format(cfg.OutputLayout))
+			w = fmt.Sprintf(", and the weekend will last to %s", t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
 		} else {
-			w = fmt.Sprintf(", and the weekend will last 3 days: %s - %s", t.Add(time.Hour*-24).Format(cfg.OutputLayout), t.Add(time.Hour*24).Format(cfg.OutputLayout))
+			w = fmt.Sprintf(", and the weekend will last 3 days: %s - %s", t.AddDate(0, 0, -1).Format(cfg.OutputLayout), t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
 		}
 	} else if t.Weekday() == time.Monday {
-		if t.Add(time.Hour * -24).Equal(d) {
-			w = fmt.Sprintf(", and the weekend will last to %s", t.Add(time.Hour*24).Format(cfg.OutputLayout))
+		if t.AddDate(0, 0, -1).Equal(d) {
+			w = fmt.Sprintf(", and the weekend will last to %s", t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
 		} else if !t.Equal(d) {
-			w = fmt.Sprintf(", and the weekend will last 3 days: %s - %s", t.Add(time.Hour*-48).Format(cfg.OutputLayout), t.Format(cfg.OutputLayout))
+			w = fmt.Sprintf(", and the weekend will last 3 days: %s - %s", t.AddDate(0, 0, -2).Format(cfg.OutputLayout), t.Format(cfg.OutputLayout))
 		}
 	}
 	return w
@@ -157,7 +157,7 @@ func showNextHoliday(cfg configuration, holidays []holiday) {
 		if t.Before(dateInLoc) {
 			if i+1 == len(holidays) {
 				if cfg.UseFakeDate || cfg.UseFakeAPI {
-					fmt.Fprintf(os.Stderr, "warning: wrong configuration, trying to retrieve first holiday in next year...\n")
+					fmt.Fprintf(os.Stderr, "warning: wrong configuration or no more holidays this year, trying to retrieve first holiday in next year...\n")
 				}
 				cfg.Year++
 				holidays = loadHolidaysAPIData(cfg)
