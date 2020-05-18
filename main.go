@@ -102,21 +102,21 @@ func loadHolidaysAPIData(cfg configuration) []holiday {
 
 func adjustWeekend(t time.Time, d time.Time, cfg configuration) string {
 	var w string
-	extendedWeekend := ", and the weekend will last 3 days:"
-	remainingWeekend := ", and the weekend will last to"
+	extendedWeekend := ", and the weekend will last 3 days: %s - %s"
+	remainingWeekend := ", and the weekend will last to %s"
 	if t.Weekday() == time.Friday || t.Weekday() == time.Saturday {
-		w = fmt.Sprintf("%s %s - %s", extendedWeekend, t.Format(cfg.OutputLayout), t.AddDate(0, 0, 2).Format(cfg.OutputLayout))
+		w = fmt.Sprintf(extendedWeekend, t.Format(cfg.OutputLayout), t.AddDate(0, 0, 2).Format(cfg.OutputLayout))
 	} else if t.Weekday() == time.Sunday {
 		if t.Equal(d) {
-			w = fmt.Sprintf("%s %s", remainingWeekend, t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
+			w = fmt.Sprintf(remainingWeekend, t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
 		} else {
-			w = fmt.Sprintf("%s %s - %s", extendedWeekend, t.AddDate(0, 0, -1).Format(cfg.OutputLayout), t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
+			w = fmt.Sprintf(extendedWeekend, t.AddDate(0, 0, -1).Format(cfg.OutputLayout), t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
 		}
 	} else if t.Weekday() == time.Monday {
 		if t.AddDate(0, 0, -1).Equal(d) {
-			w = fmt.Sprintf("%s %s", remainingWeekend, t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
+			w = fmt.Sprintf(remainingWeekend, t.AddDate(0, 0, 1).Format(cfg.OutputLayout))
 		} else if !t.Equal(d) {
-			w = fmt.Sprintf("%s %s - %s", extendedWeekend, t.AddDate(0, 0, -2).Format(cfg.OutputLayout), t.Format(cfg.OutputLayout))
+			w = fmt.Sprintf(extendedWeekend, t.AddDate(0, 0, -2).Format(cfg.OutputLayout), t.Format(cfg.OutputLayout))
 		}
 	}
 	return w
