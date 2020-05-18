@@ -1,0 +1,12 @@
+{
+  "API": "https://date.nager.at/api/v2/publicholidays/",
+  "Year": 2020,
+  "CountryCode": "UA",
+  "Location": "Europe/Kiev",
+  "APILayout": "2006-01-02",
+  "OutputLayout": "Jan 02",
+  "APITimeout": 10,
+  "UseFakeAPI": false,
+  "UseFakeDate": false,
+  "Date": "2020-05-18"
+}
